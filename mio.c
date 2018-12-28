@@ -96,6 +96,7 @@ struct editorConfig E;
 
 /*** filetypes ***/
 
+// C/C++
 char *C_HL_extensions[] = { ".c", ".h", ".cpp", NULL };
 char *C_HL_keywords[] = {
 	"switch", "if", "while", "for", "break", "continue", "return", "else", "struct", "union",
@@ -104,12 +105,48 @@ char *C_HL_keywords[] = {
 	"int|", "long|", "double|", "float|", "char|", "unsigned|", "signed|", "void|", NULL
 };
 
+// Crystal
+
+// CSS
+
+// Fish
+
+// Haskell
+
+// HTML
+
+// Javascript
+
+// Objective-C
+
+// PHP
+
+// Python
+
+// Ruby
+char *Ruby_HL_extensions[] = { ".rb" };
+char *Ruby_HL_keywords[] = {
+	"def", "end", "require", "if", "elsif", "else", "for", "in", "while", "do", "begin",
+	"until", "then", "break", "redo", "rescue", "class", "module", "return", NULL
+};
+
+// Scheme
+
+// Swift
+
 struct editorSyntax HLDB[] = {
 	{
 		"c",
 		C_HL_extensions,
 		C_HL_keywords,
 		"//", "/*", "*/",
+		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
+	},
+	{
+		"ruby",
+		Ruby_HL_extensions,
+		Ruby_HL_keywords,
+		"#", "=begin", "=end",
 		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
 	},
 };
