@@ -16,6 +16,7 @@
 #include <termios.h> // tcgetattr(), tcsetattr()
 #include <time.h> // time_t, time()
 #include <unistd.h> // write(), STDOUT_FILENO, ftruncate(), close();
+#include <inttypes.h> // strtoumax()
 
 /*** defines ***/
 
@@ -852,6 +853,52 @@ void editorFind() {
 	}
 }
 
+/*** go to ***/
+
+void editorGoToCallback(char *query, int key) {
+
+	if (key == '\r' || key == '\x1b') {
+		return;
+	} else if (key == ARROW_RIGHT || key == ARROW_DOWN) {
+		return;
+	} else if (key == ARROW_LEFT || key == ARROW_UP) {
+		return;
+	}
+
+	intmax_t num = strtoumax(query, NULL, 10);
+	if (num == UINTMAX_MAX && errno == ERANGE) {
+		// Could not convert
+		return;
+	} else {
+ 		// Our rows are indexed from 0, but lines start at 1
+ 		// Need to subtract 1 so they match
+		num--;
+		
+		// Move the cursor
+		if (num > E.numRows) {
+			E.cy = E.numRows;
+		} else if (num < 0) {
+			E.cy = 0;
+		} else {
+			E.cy = num;
+		}
+	}
+}
+
+// TODO
+// Rewrite so we don't have to rely on a callback here
+// Callback does an incremental search, which is weird in this case
+void editorGoToLine() {
+
+	int curr_cy = E.cy;
+
+	char *query = editorPrompt("Go To: %s (Use ESC/Enter)", editorGoToCallback);
+
+	if (query) {
+		free(query);
+	}
+}
+
 /*** append buffer  ***/
 
 struct abuf {
@@ -994,10 +1041,12 @@ void editorProcessKeypress() {
         	editorSave();
         	break;
 
+        case CTRL_KEY('b'):
         case HOME_KEY:
             E.cx = 0;
             break;
 
+        case CTRL_KEY('e'):
         case END_KEY:
             if (E.cy < E.numRows) {
                 E.cx = E.row[E.cy].size;
@@ -1006,6 +1055,10 @@ void editorProcessKeypress() {
 
         case CTRL_KEY('f'):
         	editorFind();
+        	break;
+
+        case CTRL_KEY('g'):
+        	editorGoToLine();
         	break;
 
         case BACKSPACE:
@@ -1174,15 +1227,33 @@ void editorDrawStatusBar(struct abuf *ab) {
 
     char status[80];
     char rightStatus[80];
+    char commands[80];
 
 
+    // Print the commands status bar
+    int commandLen = snprintf(commands, sizeof(commands), "^Q Quit | ^S Save | ^F Find | ^B Begin Line | ^E End Line | ^G Go To Line");
+    if (commandLen > E.screenCols) {
+        commandLen = E.screenCols;
+    }
+	abAppend(ab, commands, commandLen);
+	// Fill the rest of the line
+	while (commandLen < E.screenCols) {
+        abAppend(ab, " ", 1);
+        commandLen++;
+    }
+    abAppend(ab, "\r\n", 2); // print a new line for our next status
+
+
+    // Print the file status bar
     int len = snprintf(status, sizeof(status), "%.20s - %d lines %s", E.filename ? E.filename : "[No Name]", E.numRows, E.dirty ? "(modified)" : "");
     int rightLen = snprintf(rightStatus, sizeof(rightStatus), "%s | %d/%d", E.syntax ? E.syntax->filetype : "no ft", E.cy + 1, E.numRows);
 
     if (len > E.screenCols) {
         len = E.screenCols;
     }
-    abAppend(ab, status, len);
+    
+    abAppend(ab, status, len); 
+
     while (len < E.screenCols) {
         if (E.screenCols - len == rightLen) {
             abAppend(ab, rightStatus, rightLen);
@@ -1192,8 +1263,10 @@ void editorDrawStatusBar(struct abuf *ab) {
             len++;
         }
     }
+
     abAppend(ab, "\x1b[m", 3); // switch back to normal formatting
     abAppend(ab, "\r\n", 2); // print a new line for our next status
+
 }
 
 void editorDrawMessageBar(struct abuf *ab) {
@@ -1275,7 +1348,7 @@ void initEditor() {
     }
 
     // Create space for status bar
-    E.screenRows -= 2;
+    E.screenRows -= 3;
 }
 
 int main(int argc, char *argv[]) {
