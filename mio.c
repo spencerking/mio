@@ -117,6 +117,21 @@ char *C_HL_keywords[] = {
 // HTML
 
 // Javascript
+char *Javascript_HL_extensions[] = { ".js", NULL };
+
+char *Javascript_HL_keywords[] = {
+	"break", "case", "catch", "class", "const", "continue", "debugger", "default", "delete",
+	"do", "else", "enum", "export", "extends", "finally", "for", "function", "if", "implements",
+	"import", "in", "instanceof", "interface", "let", "new", "package", "private", "protected",
+	"public", "return", "static", "super", "switch", "this", "throw", "try", "typeof", "var",
+	"void", "while", "with", "yield", "true", "false", "null", "NaN", "global","window", "prototype",
+	"constructor", "document", "isNaN", "arguments", "undefined",
+
+	"Infinity|", "Array|", "Object|", "Number|", "String|", "Boolean|", "Function|", "ArrayBuffer|",
+	"DataView|", "Float32Array|", "Float64Array|", "Int8Array|", "Int16Array|", "Int32Array|",
+	"Uint8Array|", "Uint8ClampedArray|", "Uint32Array|", "Date|", "Error|", "Map|", "RegExp|",
+	"Symbol|", "WeakMap|", "WeakSet|", "Set|", NULL
+};
 
 // Objective-C
 
@@ -125,7 +140,7 @@ char *C_HL_keywords[] = {
 // Python
 
 // Ruby
-char *Ruby_HL_extensions[] = { ".rb" };
+char *Ruby_HL_extensions[] = { ".rb", NULL };
 char *Ruby_HL_keywords[] = {
 	"def", "end", "require", "if", "elsif", "else", "for", "in", "while", "do", "begin",
 	"until", "then", "break", "redo", "rescue", "class", "module", "return", NULL
@@ -140,6 +155,13 @@ struct editorSyntax HLDB[] = {
 		"c",
 		C_HL_extensions,
 		C_HL_keywords,
+		"//", "/*", "*/",
+		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
+	},
+	{
+		"javascript",
+		Javascript_HL_extensions,
+		Javascript_HL_keywords,
 		"//", "/*", "*/",
 		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
 	},
