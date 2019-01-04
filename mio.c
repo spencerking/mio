@@ -143,6 +143,15 @@ char *Javascript_HL_keywords[] = {
 	"Symbol|", "WeakMap|", "WeakSet|", "Set|", NULL
 };
 
+// MUMPS
+char *MUMPS_HL_extensions[] = { ".m", ".mps", NULL };
+char *MUMPS_HL_keywords[] = {
+	"n", "f", "w", "s", "r", "d", "k", "i", "e", "o", "c", "u", "q", "h", "b", "g",
+
+	"new", "for", "while", "set", "read", "do", "kill", "if", "else",
+	"open", "close", "use", "quit", "halt", "hang", "break", "goto", NULL
+};
+
 // Objective-C
 
 // PHP
@@ -187,6 +196,13 @@ struct editorSyntax HLDB[] = {
 		Javascript_HL_extensions,
 		Javascript_HL_keywords,
 		"//", "/*", "*/",
+		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
+	},
+	{
+		"mumps",
+		MUMPS_HL_extensions,
+		MUMPS_HL_keywords,
+		";", NULL, NULL,
 		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
 	},
 	{
