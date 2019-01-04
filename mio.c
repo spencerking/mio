@@ -111,14 +111,24 @@ char *C_HL_keywords[] = {
 // CSS
 
 // Fish
+char *Fish_HL_extensions[] = { ".fish" };
+char *Fish_HL_keywords[] = {
+	"function", "end", "set", "switch", "case", "return", "while", "if", "else", NULL
+};
 
 // Haskell
 
 // HTML
+char *HTML_HL_extensions[] = { ".html" };
+char *HTML_HL_keywords[] = {
+	"html", "head", "body", "div", "span", "ul", "ol", "li", "title", "a", "link",
+	"script", "h1", "h2", "h3", "h4", "h5", "h6", "h7",
+
+	"href|", "src|", "type|", "rel|", "id|", "class|", "onmouseover|", "onmouseleave|", NULL
+};
 
 // Javascript
 char *Javascript_HL_extensions[] = { ".js", NULL };
-
 char *Javascript_HL_keywords[] = {
 	"break", "case", "catch", "class", "const", "continue", "debugger", "default", "delete",
 	"do", "else", "enum", "export", "extends", "finally", "for", "function", "if", "implements",
@@ -156,6 +166,20 @@ struct editorSyntax HLDB[] = {
 		C_HL_extensions,
 		C_HL_keywords,
 		"//", "/*", "*/",
+		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
+	},
+	{
+		"html",
+		HTML_HL_extensions,
+		HTML_HL_keywords,
+		"<!--", "<!--", "-->",
+		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
+	},
+	{
+		"fish",
+		Fish_HL_extensions,
+		Fish_HL_keywords,
+		"#", NULL, NULL,
 		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
 	},
 	{
