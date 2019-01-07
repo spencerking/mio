@@ -169,6 +169,18 @@ char *Ruby_HL_keywords[] = {
 
 // Swift
 
+// Vimscript
+char *Vimscript_HL_extensions[] = { ".vim", ".vimrc", NULL };
+char * Vimscript_HL_keywords[] = {
+    "function", "endfunction", "if", "else", "endif", "while", "endwhile", "let", "set",
+    "wincmd", "autocmd", "execute", "colo", "silent", "map", "nmap", "nnoremap", "syntax",
+    "return",
+
+    "tabstop|", "expandtab|", "shiftwidth|", "number|", "showmap|", "mouse|", "splitbelow|",
+    "splitright|", "hlsearch|", "incsearch|", "switchbuf", "laststatus", "clipboard|",
+    "showmatch|", NULL
+};
+
 struct editorSyntax HLDB[] = {
 	{
 		"c",
@@ -211,7 +223,14 @@ struct editorSyntax HLDB[] = {
 		Ruby_HL_keywords,
 		"#", "=begin", "=end",
 		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
-	},
+	},    
+	{
+        "vim",
+        Vimscript_HL_extensions,
+        Vimscript_HL_keywords,
+        "\"", NULL, NULL,
+        HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
+    },
 };
 
 #define HLDB_ENTRIES (sizeof(HLDB) / sizeof(HLDB[0]))
