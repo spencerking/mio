@@ -155,6 +155,11 @@ char *MUMPS_HL_keywords[] = {
 // Objective-C
 
 // PHP
+char *PHP_HL_extensions[] = { ".php", NULL };
+char *PHP_HL_keywords[] = {
+    "if", "else", "elseif", "while", "for", "return", "class", "function", "public",
+    "private", "extends", "use", "namespace", NULL
+};
 
 // Python
 
@@ -217,6 +222,13 @@ struct editorSyntax HLDB[] = {
 		";", NULL, NULL,
 		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
 	},
+	{
+        "php",
+        PHP_HL_extensions,
+        PHP_HL_keywords,
+        "//", "/*", "*/",
+        HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
+    },
 	{
 		"ruby",
 		Ruby_HL_extensions,
