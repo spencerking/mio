@@ -235,7 +235,7 @@ struct editorSyntax HLDB[] = {
 		Ruby_HL_keywords,
 		"#", "=begin", "=end",
 		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
-	},    
+	},
 	{
         "vim",
         Vimscript_HL_extensions,
@@ -425,7 +425,7 @@ void editorUpdateSyntax(editorRow *row) {
 	char *multi_comment_end = E.syntax->multiline_comment_end;
 
 	int single_comments_length = single_comments ? strlen(single_comments) : 0;
-	int multi_comment_start_length = multi_comment_start ? strlen(multi_comment_start) : 0; 
+	int multi_comment_start_length = multi_comment_start ? strlen(multi_comment_start) : 0;
 	int multi_comment_end_length = multi_comment_end ? strlen(multi_comment_end) : 0;
 
 	int prev_separator = 1;
@@ -435,7 +435,7 @@ void editorUpdateSyntax(editorRow *row) {
 	int i = 0;
 	//for (i = 0; i < row->renderSize; i++) {
 	while(i < row->renderSize) {
-		char c = row->render[i];		
+		char c = row->render[i];
 		unsigned char prev_highlight = (i > 0) ? row->highlight[i - 1] : HL_NORMAL;
 
 		if (single_comments_length && !in_string && !in_comment) {
@@ -551,7 +551,7 @@ int editorSyntaxToColor(int highlight) {
 
 		case HL_MATCH:
 			return 34;
-		
+
 		default:
 			return 37;
 	}
@@ -658,7 +658,7 @@ void editorInsertRow(int at, char *s, size_t len) {
     memmove(&E.row[at + 1], &E.row[at], sizeof(editorRow) * (E.numRows - at));
 	for (int j = at + 1; j <= E.numRows; j++) {
 		E.row[j].index++;
-	}    
+	}
 
     E.row[at].index = at;
 
@@ -786,7 +786,7 @@ void editorDeleteChar() {
 
 // Converts all of the editorRows to a string
 char *editorRowsToString(int *bufLen) {
-	
+
 	// Add up the lengths of our rows
 	int totalLength = 0;
 	int j;
@@ -806,6 +806,21 @@ char *editorRowsToString(int *bufLen) {
 	}
 
 	return buf;
+}
+
+void editorKillCurrentBuffer() {
+	E.cx = 0;
+    E.cy = 0;
+    E.rx = 0;
+    E.rowOffset = 0;
+    E.colOffset = 0;
+    E.numRows = 0;
+    E.row = NULL;
+    E.dirty = 0;
+    E.filename = NULL;
+    E.statusmsg[0] = '\0';
+    E.statusmsg_time = 0;
+    E.syntax = NULL;
 }
 
 void editorOpen(char *filename) {
@@ -935,7 +950,7 @@ void editorFind() {
 	int saved_rowOffset = E.rowOffset;
 
 	char *query = editorPrompt("Search: %s (Use ESC/Arrow/Enter)", editorFindCallback);
-	
+
 	if (query) {
 		free(query);
 	} else {
@@ -966,7 +981,7 @@ void editorGoToCallback(char *query, int key) {
  		// Our rows are indexed from 0, but lines start at 1
  		// Need to subtract 1 so they match
 		num--;
-		
+
 		// Move the cursor
 		if (num > E.numRows) {
 			E.cy = E.numRows;
@@ -1133,6 +1148,10 @@ void editorProcessKeypress() {
         case CTRL_KEY('s'):
         	editorSave();
         	break;
+
+        case CTRL_KEY('k'):
+        	editorKillCurrentBuffer();
+			break;
 
         case CTRL_KEY('b'):
         case HOME_KEY:
@@ -1344,8 +1363,8 @@ void editorDrawStatusBar(struct abuf *ab) {
     if (len > E.screenCols) {
         len = E.screenCols;
     }
-    
-    abAppend(ab, status, len); 
+
+    abAppend(ab, status, len);
 
     while (len < E.screenCols) {
         if (E.screenCols - len == rightLen) {
