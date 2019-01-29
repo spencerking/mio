@@ -1358,19 +1358,72 @@ void editorDrawStatusBar(struct abuf *ab) {
     char commands[80];
 
 
-    // Print the commands status bar
-    int commandLen = snprintf(commands, sizeof(commands), "^Q Quit | ^S Save | ^F Find | ^B Begin Line | ^E End Line | ^G Go To Line");
-    if (commandLen > E.screenCols) {
-        commandLen = E.screenCols;
-    }
-	abAppend(ab, commands, commandLen);
-	// Fill the rest of the line
-	while (commandLen < E.screenCols) {
-        abAppend(ab, " ", 1);
-        commandLen++;
-    }
-    abAppend(ab, "\r\n", 2); // print a new line for our next status
+ //    // Print the commands status bar
+ //    int commandLen = snprintf(commands, sizeof(commands), "^Q Quit | ^S Save | ^F Find | ^B Begin Line | ^E End Line | ^G Go To Line");
+ //    if (commandLen > E.screenCols) {
+ //        commandLen = E.screenCols;
+ //    }
+	// abAppend(ab, commands, commandLen);
+	// // Fill the rest of the line
+	// while (commandLen < E.screenCols) {
+ //        abAppend(ab, " ", 1);
+ //        commandLen++;
+ //    }
+ //    abAppend(ab, "\r\n", 2); // print a new line for our next status
 
+    abAppend(ab, "^Q", 2);
+    abAppend(ab, "\x1b[m", 3); // normal
+    abAppend(ab, " Quit ", 6);
+    
+    abAppend(ab, "\x1b[7m", 4); // invert
+    abAppend(ab, "^S", 2);
+    abAppend(ab, "\x1b[m", 3); // normal
+    abAppend(ab, " Save ", 6);
+
+    abAppend(ab, "\x1b[7m", 4); // invert
+    abAppend(ab, "^O", 2);
+    abAppend(ab, "\x1b[m", 3); // normal
+    abAppend(ab, " Open ", 6);
+
+    abAppend(ab, "\x1b[7m", 4); // invert
+    abAppend(ab, "^K", 2);
+    abAppend(ab, "\x1b[m", 3); // normal
+    abAppend(ab, " Kill ", 6);
+
+    abAppend(ab, "\x1b[7m", 4); // invert
+    abAppend(ab, "^F", 2);
+    abAppend(ab, "\x1b[m", 3); // normal
+    abAppend(ab, " Find ", 6);
+
+    abAppend(ab, "\x1b[7m", 4); // invert
+    abAppend(ab, "^B", 2);
+    abAppend(ab, "\x1b[m", 3); // normal
+    abAppend(ab, " BeginLine ", 11);
+
+    abAppend(ab, "\x1b[7m", 4); // invert
+    abAppend(ab, "^E", 2);
+    abAppend(ab, "\x1b[m", 3); // normal
+    abAppend(ab, " EndLine ", 9);
+
+    abAppend(ab, "\x1b[7m", 4); // invert
+    abAppend(ab, "^G", 2);
+    abAppend(ab, "\x1b[m", 3); // normal
+    abAppend(ab, " GoTo ", 6);
+
+    abAppend(ab, "\r\n", 2); // new line
+
+    abAppend(ab, "\x1b[7m", 4); // invert
+    abAppend(ab, "^N", 2);
+    abAppend(ab, "\x1b[m", 3); // normal
+    abAppend(ab, " Next ", 6);
+
+    abAppend(ab, "\x1b[7m", 4); // invert
+    abAppend(ab, "^P", 2);
+    abAppend(ab, "\x1b[m", 3); // normal
+    abAppend(ab, " Prev ", 6);
+
+	abAppend(ab, "\x1b[7m", 4); // invert
+	abAppend(ab, "\r\n", 2); // print a new line for our next status
 
     // Print the file status bar
     int len = snprintf(status, sizeof(status), "%.20s - %d lines %s", E.filename ? E.filename : "[No Name]", E.numRows, E.dirty ? "(modified)" : "");
@@ -1476,7 +1529,7 @@ void initEditor() {
     }
 
     // Create space for status bar
-    E.screenRows -= 3;
+    E.screenRows -= 4;
 }
 
 int main(int argc, char *argv[]) {
