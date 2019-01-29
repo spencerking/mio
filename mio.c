@@ -884,6 +884,18 @@ void editorSave() {
 	editorSetStatusMessage("Can't save! I/O error: %s", strerror(errno));
 }
 
+// TODO:
+// Should open in a new buffer
+// Currently kills the existing buffer
+void editorOpenFile() {
+	size_t bufsize = 128;
+	char *file = malloc(bufsize);
+    file = editorPrompt("Select a file: %s (Use ESC/Enter)", NULL);
+	editorKillCurrentBuffer();
+	editorOpen(file);
+	free(file);
+}
+
 /*** find ***/
 
 void editorFindCallback(char *query, int key) {
@@ -1148,6 +1160,10 @@ void editorProcessKeypress() {
         case CTRL_KEY('s'):
         	editorSave();
         	break;
+
+        case CTRL_KEY('o'):
+        	editorOpenFile();
+			break;
 
         case CTRL_KEY('k'):
         	editorKillCurrentBuffer();
