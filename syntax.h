@@ -15,6 +15,17 @@ char *C_HL_keywords[] = {
 };
 
 // Crystal
+char *Crystal_HL_extensions[] = { ".cr", NULL };
+char *Crystal_HL_keywords[] = {
+	"abstract", "alias", "as", "as?", "asm", "begin", "break", "case",
+	"class", "def", "do", "else", "elsif", "end", "ensure", "enum",
+	"extend", "false", "for", "fun", "if", "in", "include", "instance_sizeof",
+	"is_a?", "lib", "macro", "module", "next", "nil", "nil?", "of", "out",
+	"pointerof", "private", "protected", "require", "rescue", "responds_to?",
+	"return", "select", "self", "sizeof", "struct", "super", "then", "true",
+	"type", "typeof", "uninitialized", "union", "unless", "until", "verbatim",
+	"when", "while", "with", "yield", NULL
+};
 
 // CSS
 
@@ -100,6 +111,13 @@ struct editorSyntax HLDB[] = {
 		C_HL_extensions,
 		C_HL_keywords,
 		"//", "/*", "*/",
+		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
+	},
+	{
+		"crystal",
+		Crystal_HL_extensions,
+		Crystal_HL_keywords,
+		"#", NULL, NULL,
 		HL_HIGHLIGHT_NUMBERS | HL_HIGHLIGHT_STRINGS
 	},
 	{
