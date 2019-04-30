@@ -18,11 +18,11 @@
 #include <unistd.h> // write(), STDOUT_FILENO, ftruncate(), close();
 #include <inttypes.h> // strtoumax()
 
+#include "config.h"
+
 /*** defines ***/
 
 #define VERSION "0.0.1"
-#define TAB_STOP 4
-#define QUIT_TIMES 3
 
 #define CTRL_KEY(k) ((k) & 0x1f)
 
