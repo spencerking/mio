@@ -597,6 +597,15 @@ void editorInsertNewline() {
 	E.cx = 0;
 }
 
+void editorDeleteLine() { 
+	editorDeleteRow(E.cy);
+	E.cx = 0;
+	if (E.cy != 0) {
+		E.cy--;
+	}
+
+}
+
 void editorDeleteChar() {
 	// Can't delete past the end of the file
 	if (E.cy == E.numRows) {
@@ -1006,7 +1015,11 @@ void editorProcessKeypress() {
         	editorKillCurrentBuffer();
 			break;
 
-        case CTRL_KEY('b'):
+	case CTRL_KEY('d'):
+		editorDeleteLine();
+		break;
+
+	case CTRL_KEY('b'):
         case HOME_KEY:
             E.cx = 0;
             break;
@@ -1243,11 +1256,16 @@ void editorDrawStatusBar(struct abuf *ab) {
     abAppend(ab, " EndLine ", 9);
 
     abAppend(ab, "\x1b[7m", 4); // invert
+    abAppend(ab, "^D", 2);
+    abAppend(ab, "\x1b[m", 3); // normal
+    abAppend(ab, " DelLine ", 9);
+
+    abAppend(ab, "\r\n", 2); // new line
+
+    abAppend(ab, "\x1b[7m", 4); // invert
     abAppend(ab, "^G", 2);
     abAppend(ab, "\x1b[m", 3); // normal
     abAppend(ab, " GoTo ", 6);
-
-    abAppend(ab, "\r\n", 2); // new line
 
     abAppend(ab, "\x1b[7m", 4); // invert
     abAppend(ab, "^N", 2);
